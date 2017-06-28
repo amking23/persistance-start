@@ -3,6 +3,8 @@ var Hotel = require('../models/hotel');
 var Restaurant = require('../models/restaurant');
 var Activity = require('../models/activity');
 
+router.use('/days', require('./days'));
+
 router.get('/hotels', function(req, res){
 	Hotel.findAll()
 	.then(function(hotels){
@@ -23,5 +25,6 @@ router.get('/activities', function(req, res){
 		res.send(activities);
 	})
 })
+
 
 module.exports = router;

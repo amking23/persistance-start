@@ -31,6 +31,11 @@ $(function(){
 	})
 	.catch(console.error.bind(console));
 
+	$.post('/api/days')
+	.then(function() {
+		
+	})
+
 })
 
 
