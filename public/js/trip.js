@@ -15,12 +15,12 @@
  * which take `attraction` objects and pass them to `currentDay`.
  */
 
-var tripModule = (function () {
+var makeTripModule = function () {
 
   // application state
 
   var days = [],
-      currentDay;
+    currentDay;
 
   // jQuery selections
 
@@ -32,7 +32,7 @@ var tripModule = (function () {
 
   // method used both internally and externally
 
-  function switchTo (newCurrentDay) {
+  function switchTo(newCurrentDay) {
     if (currentDay) currentDay.hide();
     currentDay = newCurrentDay;
     currentDay.show();
@@ -45,17 +45,20 @@ var tripModule = (function () {
     $removeButton.on('click', deleteCurrentDay);
   });
 
-  function addDay () {
+  function addDay() {
     if (this && this.blur) this.blur(); // removes focus box from buttons
     var newDay = dayModule.create({ number: days.length + 1 }); // dayModule
     days.push(newDay);
     if (days.length === 1) {
       currentDay = newDay;
     }
+    $.post('/api/days')
+      //.then(function (data) { console.log('POST response data: ', data) })
+      .catch(console.error.bind(console));
     switchTo(newDay);
   }
 
-  function deleteCurrentDay () {
+  function deleteCurrentDay() {
     // prevent deleting last day
     if (days.length < 2 || !currentDay) return;
     // remove from the collection
@@ -92,4 +95,4 @@ var tripModule = (function () {
 
   return publicAPI;
 
-}());
+};

@@ -4,7 +4,11 @@ var Hotel = require('./hotel');
 var Activity = require('./activity');
 var Restaurant = require('./restaurant');
 
-var Day = db.define('day', {})
+var Day = db.define('day', {
+    day: {
+        type: Sequelize.INTEGER
+    }
+})
 
 Day.belongsTo(Hotel)
 Day.belongsToMany(Restaurant, {through: 'day_restaurant'})

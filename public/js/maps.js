@@ -1,7 +1,7 @@
 'use strict';
 /* global google */
 
-var mapModule = (function () {
+var makeMapModule = function () {
 
   var currentMap,
       currentMarkers = [],
@@ -84,7 +84,7 @@ var mapModule = (function () {
 
   return publicAPI;
 
-}());
+};
 
 
 // styles

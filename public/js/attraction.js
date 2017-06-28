@@ -14,7 +14,7 @@
  * returns that object. That method is used principally in `options.js`.
  */
 
-var attractionModule = (function () {
+var makeAttractionModule = function () {
 
   // jQuery selections
 
@@ -55,6 +55,13 @@ var attractionModule = (function () {
 
   Attraction.prototype.show = function () {
     // itinerary
+    //console.log('this = ', this)
+    var currDay = +$('.current-day').text()
+    console.log(currDay)
+    $.post(`/api/days/${currDay}/${this.type}/${this.id}`)
+      .then(function () { return this.id})
+      .catch(console.error.bind(console));
+
     switch (this.type) {
       case 'hotel': $hotel.append(this.$itineraryItem); break;
       case 'restaurant': $restaurants.append(this.$itineraryItem); break;
@@ -82,4 +89,4 @@ var attractionModule = (function () {
 
   return publicAPI;
 
-}());
+};

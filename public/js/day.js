@@ -13,7 +13,7 @@
  * This module has one public method: `.create()`, used by `days.js`.
  */
 
-var dayModule = (function () {
+var makeDayModule = function () {
 
  // jQuery selections
 
@@ -46,6 +46,7 @@ var dayModule = (function () {
     this.number = num;
     this.$button.text(num);
   };
+
 
  Day.prototype.buildButton = function () {
     this.$button = $('<button class="btn btn-circle day-btn"></button>')
@@ -141,4 +142,4 @@ var dayModule = (function () {
 
  return publicAPI;
 
-}());
+};

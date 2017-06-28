@@ -4,38 +4,57 @@ $(function(){
 	var $restaurantChoices = $('#restaurant-choices')
 	var $activityChoices = $('#activity-choices')
 
-	$.get('/api/hotels')
-	.then(function (hotels) {
-	  	hotels.forEach(function(hotel){
-		    $hotelOption = $(`<option value =${hotel.id}>${hotel.name}</option>`)
-	    	$hotelChoices.append($hotelOption)
-	  });
-	})
-	.catch(console.error.bind(console));
+	let getHotels = $.get('/api/hotels')
+	let getRestaurants = $.get('/api/restaurants')
+	let getActivities = $.get('/api/activities')
 
-	$.get('/api/restaurants')
-	.then(function (restaurants) {
-	  restaurants.forEach(function(restaurant){
-	    $restaurantOption = $(`<option value =${restaurant.id}>${restaurant.name}</option>`)
-    	$restaurantChoices.append($restaurantOption)
-	  });
-	})
-	.catch(console.error.bind(console));
+	Promise.all([getHotels, getRestaurants, getActivities])
+	.then(function(results) {
+		hotels = results[0];
+		restaurants = results[1];
+		activities = results[2];
 
-	$.get('/api/activities')
-	.then(function (activities) {
-	  activities.forEach(function(activity){
-		    $activityOption = $(`<option value =${activity.id}>${activity.name}</option>`)
-	    	$activityChoices.append($activityOption)
-	  });
-	})
-	.catch(console.error.bind(console));
+	    // jQuery selects
+  var $optionsPanel = $('#options-panel');
+  var $hotelSelect = $optionsPanel.find('#hotel-choices');
+  var $restaurantSelect = $optionsPanel.find('#restaurant-choices');
+  var $activitySelect = $optionsPanel.find('#activity-choices');
 
-	$.post('/api/days')
-	.then(function() {
+  // make all the option tags (second arg of `forEach` is a `this` binding)
+  hotels.forEach(makeOption, $hotelSelect);
+  restaurants.forEach(makeOption, $restaurantSelect);
+  activities.forEach(makeOption, $activitySelect);
+
+  function makeOption (databaseAttraction) {
+    var $option = $('<option></option>') // makes a new option tag
+      .text(databaseAttraction.name)
+      .val(databaseAttraction.id);
+    this.append($option); // add the option to the specific select
+  }
+
+  // what to do when the `+` button next to a `select` is clicked
+  $optionsPanel.on('click', 'button[data-action="add"]', function () {
+    var $select = $(this).siblings('select');
+    var type = $select.data('type'); // from HTML data-type attribute
+    var id = $select.find(':selected').val();
+    // get associated attraction and add it to the current day in the trip
+    var attraction = attractionsModule.getByTypeAndId(type, id);
+    tripModule.addToCurrent(attraction);
+  });
 		
-	})
+		mapModule = makeMapModule();
+		attractionModule = makeAttractionModule();
+		attractionsModule = makeAttractionsModule();
+		dayModule = makeDayModule();
+		tripModule = makeTripModule();
 
+		tripModule.load();
+	})
+	.catch(console.error.bind(console));
 })
 
 
+	// $.get('/api/days')
+	// .then(function (data) { console.log('GET response data: ', data) })
+	// .catch(console.error.bind(console));
+	

@@ -7,7 +7,7 @@
  * to add an attraction in the `options` module.
  */
 
-var attractionsModule = (function () {
+var makeAttractionsModule = function () {
 
   // application state
 
@@ -48,4 +48,4 @@ var attractionsModule = (function () {
 
   return publicAPI;
 
-}());
+};
