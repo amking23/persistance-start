@@ -53,7 +53,7 @@ router.get('/', function(req, res){
         dayInst.setHotel(attractionId)
     } else if (type === 'restaurant'){
         dayInst.addRestaurant(attractionId)
-    } else if (type === 'hotel'){
+    } else if (type === 'activity'){
         dayInst.addActivity(attractionId)
     }
     }).then( function () {
